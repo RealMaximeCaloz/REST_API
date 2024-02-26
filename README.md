@@ -19,3 +19,13 @@ A configuration file has been created to override the addResourceHandlers() meth
 
 This allows dynamically-generated images to be displayed onto the front-end to the user.
 Otherwise, the images would not display, if generated into the static folder.
+
+# Installation
+1. Clone this repository:
+```
+$ git clone https://github.com/RealMaximeCaloz/REST_API.git
+``` 
+
+# How to Run
+1. Make sure you have Maven installed.
+2. Run `mvn clean spring-boot:run` in your terminal.
