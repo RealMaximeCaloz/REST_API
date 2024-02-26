@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Instagram Post Generator</title>
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <link rel="stylesheet" type="text/css" th:href="@{/styles.css}">
+</head>
+<body>
+<section class="my-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-8 mx-auto">
+                <h1 style="text-align: center">Instagram Post Generator</h1>
+                <h2 style="text-align: center">Result Generated! Upload another?</h2>
+                <p style="text-align: center; font-style: italic">Hint: Right-Click --> Save As to save the picture!</p>
+                <img th:src="@{'/images/' + ${filename}}" width="400px" style="display: block; margin: 0 auto;"/>
+                <h2>Upload another image:</h2>
+                <form method="post" action="/api/addText/upload" enctype="multipart/form-data">
+                    <label for="fname">Enter the text you want to add to the image:</label>
+                    <input type="text" id="fname" name="textToAdd" th:value="${textToAdd}"  placeholder="Enter the text you want to add">
+                    <div class="form-group">
+                        <input type="file" name="image" accept="image/*" class="form-control-file">
+                    </div>
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                    <br>
+                </form>
+                <span th:if="${msg != null}" th:text="${msg}"></span>
+            </div>
+        </div>
+    </div>
+</section>
+</body>
+</html>

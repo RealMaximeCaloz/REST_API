@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="styles.css">
+    <title>Instagram Post Generator</title>
+</head>
+<body>
+<section class="my-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-8 mx-auto">
+                <h1 style="text-align: center">Instagram Post Generator</h1>
+                <form method="post" action="/api/addText/upload" enctype="multipart/form-data">
+                    <label for="fname">Enter the text you want to add to the image:</label>
+                    <input type="text" id="fname" name="textToAdd" th:value="${textToAdd}"  placeholder="Enter the text you want to add">
+                    <div class="form-group">
+                        <h2>Upload your image:</h2>
+                        <input type="file" name="image" accept="image/*" class="form-control-file">
+                    </div>
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                    <br>
+                </form>
+                <span th:if="${msg != null}" th:text="${msg}"></span>
+            </div>
+        </div>
+    </div>
+</section>
+</body>
+</html>

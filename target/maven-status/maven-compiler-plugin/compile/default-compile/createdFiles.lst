@@ -1,0 +1,4 @@
+com\rest\restapi\controller\AddTextController.class
+com\rest\restapi\config\AdditionalResourceWebConfiguration.class
+com\rest\restapi\RestApiApplication.class
+com\rest\restapi\service\AddTextService.class
