@@ -9,7 +9,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -20,7 +19,11 @@ import java.nio.file.Paths;
 @RequestMapping("/api/addText")
 public class AddTextController {
     private static final String UPLOAD_DIRECTORY = System.getProperty("user.dir") + "/uploads";
-    private static final AddTextService addTextService = new AddTextService();
+    private final AddTextService addTextService;
+
+    public AddTextController(AddTextService addTextService) {
+        this.addTextService = addTextService;
+    }
 
     @GetMapping("/image/{filename}")
     @ResponseBody
@@ -35,20 +38,31 @@ public class AddTextController {
         Model model,
         @RequestParam("image") MultipartFile file,
         @RequestParam(name = "textToAdd") String textToAdd
-        ) throws IOException, InterruptedException {
-        StringBuilder fileNames = new StringBuilder();
-        Path fileNameAndPath = Paths.get(UPLOAD_DIRECTORY, file.getOriginalFilename());
-        fileNames.append(file.getOriginalFilename());
-
-        createUploadDirectoryIfNeeded();
-
-        Files.write(fileNameAndPath, file.getBytes());
-        String updatedImgName = addTextService.addTextToImage(new File(UPLOAD_DIRECTORY + "/" + file.getOriginalFilename()), textToAdd);
-        System.out.println("filename: "+updatedImgName);
-        model.addAttribute("filename", updatedImgName);
-        model.addAttribute("msg", "Uploaded image! Upload another?");
+    ) {
+        try {
+            String updatedImgName = saveAndProcessImage(file, textToAdd);
+            model.addAttribute("filename", updatedImgName);
+            model.addAttribute("msg", "Uploaded image! Upload another?");
+        } catch (IOException | InterruptedException e) {
+            // Handle the exception appropriately
+            model.addAttribute("error", "An error occurred while processing the image.");
+            e.printStackTrace(); // Log the exception for debugging purposes
+        }
         return "uploadIndex";
     }
+    
+    private String saveAndProcessImage(MultipartFile file, String textToAdd) throws IOException, InterruptedException {
+        String fileName = file.getOriginalFilename();
+        Path filePath = Paths.get(UPLOAD_DIRECTORY, fileName);
+        createUploadDirectoryIfNeeded();
+    
+        Files.write(filePath, file.getBytes());
+    
+        String updatedImgName = addTextService.addTextToImage(new File(filePath.toString()), textToAdd);
+        System.out.println("filename: " + updatedImgName);
+        return updatedImgName;
+    }
+
 
     private void createUploadDirectoryIfNeeded() throws IOException {
         if (!Files.exists(Paths.get(UPLOAD_DIRECTORY))) {
@@ -59,5 +73,3 @@ public class AddTextController {
         }
     }
 }
-
-
